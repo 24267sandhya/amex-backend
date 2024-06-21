@@ -1,7 +1,16 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const GoalSchema = new mongoose.Schema({
-  date: {
+const goalSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
     type: Date,
     required: true,
   },
@@ -9,30 +18,27 @@ const GoalSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  type: {
-    type: String,
-    required: true,
-  },
-  duration: {
-    type: String,
-    required: true,
-  },
   category: {
     type: String,
+    required: true,
+  },
+  alertAmount: {
+    type: Number,
   },
   currentAmount: {
     type: Number,
     default: 0,
   },
-  image: {
-    type: String,
-    default: "https://via.placeholder.com/50",
+  completed: {
+    type: Boolean,
+    default: false,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+  rewardAwarded: {
+    type: Boolean,
+    default: false,
   },
 });
 
-module.exports = mongoose.model("Goal", GoalSchema);
+const Goal = mongoose.model('Goal', goalSchema);
+
+module.exports = Goal;

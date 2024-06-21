@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const cardSchema = new mongoose.Schema({
   cardNumber: {
     type: String,
@@ -22,7 +22,7 @@ const stockSchema = new mongoose.Schema({
   currentPrice: Number,
   dailyReturn: Number,
   purchaseDate: Date,
-  totalReturn: Number,
+  totalReturn: Number
 });
 
 const fundSchema = new mongoose.Schema({
@@ -30,60 +30,56 @@ const fundSchema = new mongoose.Schema({
   amount: Number,
 });
 
-const userSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Please add name"],
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: [true, "Please add email"],
-      unique: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Please add password"],
-      minlength: 6,
-      maxlength: 64,
-    },
-    role: {
-      type: String,
-      default: "user",
-    },
-    profilePicture: {
-      type: String,
-    },
-    transactions: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Transaction",
-      },
-    ],
-    qrCode: {
-      type: String,
-      required: true,
-    },
-    paymentPassword: {
-      type: String,
-    },
-    cards: [cardSchema],
-    details: {
-      fullName: String,
-      aadhaar: String,
-      pan: String,
-      phone: String,
-      bankName: String,
-      accountNumber: String,
-      ifsc: String,
-      investmentPassword: String,
-    },
-    stocks: [stockSchema],
-    funds: [fundSchema],
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Please add name'],
+    trim: true,
   },
-  { timestamps: true }
-);
+  email: {
+    type: String,
+    required: [true, 'Please add email'],
+    unique: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: [true, 'Please add password'],
+    minlength: 6,
+    maxlength: 64,
+  },
+  role: {
+    type: String,
+    default: 'user',
+  },
+  transactions: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Transaction',
+  }],
+  qrCode: {
+    type: String,
+    required: true,
+  },
+  paymentPassword: {
+    type: String,
+  },
+  cards: [cardSchema],
+  details: {
+    fullName: String,
+    aadhaar: String,
+    pan: String,
+    phone: String,
+    bankName: String,
+    accountNumber: String,
+    ifsc: String,
+    investmentPassword: String,
+  },
+  stocks: [stockSchema],
+  funds: [fundSchema],
+  rewardPoints: {
+    type: Number,
+    default: 0,
+  },
+}, { timestamps: true });
 
-module.exports = mongoose.models.User || mongoose.model("User", userSchema);
+module.exports = mongoose.models.User || mongoose.model('User', userSchema);
