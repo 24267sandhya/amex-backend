@@ -70,6 +70,7 @@ const plansRouter = require("./routes/plans");
 const goalsRouter = require("./routes/goalRoutes"); // Add this line
 const chatRoutes = require("./routes/chatRoutes"); // Chat routes
 const userRoutes = require("./routes/userRoutes"); // User routes
+const feedbackRoutes = require("./routes/feedbackRoutes");
 
 app.use("/api/plans", plansRouter);
 app.use("/api/v1/goal", goalsRouter); // Add this line
@@ -78,6 +79,7 @@ app.use("/api/v1/auth", userRoutes); // User routes
 app.use("/api/v1/transaction", require("./routes/transactionRoutes"));
 app.use("/api/v1/income", require("./routes/incomeRoutes"));
 app.use("/api/v1/stock", require("./routes/stockRoutes"));
+app.use("/api/v1/feedback", feedbackRoutes);
 
 app.post("/pay", async (req, res, next) => {
   try {
