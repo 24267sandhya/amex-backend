@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   registerController,
+  getUserById,
   loginController,
   updateUserController,
   getUserQrCode,
@@ -10,7 +11,7 @@ const {
   getCards,
   saveUserDetails,
   checkUserDetails,
-  verifyPassword, 
+  verifyPassword,
   buyStock,
   sellStock,
   getUserPurchasedStocks,
@@ -31,43 +32,44 @@ router.post("/register", registerController);
 router.post("/login", loginController);
 
 // UPDATE || PUT
-router.put('/update-user', requireSignIn, updateUserController);
+router.put("/update-user", requireSignIn, updateUserController);
 
 // Get User QR Code
-router.get('/qrcode/:userId', getUserQrCode);
+router.get("/qrcode/:userId", getUserQrCode);
 
 // Save Card Details
-router.post('/save-card', requireSignIn, saveCardDetails);
+router.post("/save-card", requireSignIn, saveCardDetails);
 
 // Process Payment
-router.post('/process-payment', requireSignIn, processPayment);
+router.post("/process-payment", requireSignIn, processPayment);
 
 // Get Saved Cards
-router.get('/get-cards', requireSignIn, getCards);
+router.get("/get-cards", requireSignIn, getCards);
 
 // Save User Details
-router.post('/save-details', requireSignIn, saveUserDetails);
+router.post("/save-details", requireSignIn, saveUserDetails);
 
 // Check User Details
-router.get('/check-details', requireSignIn, checkUserDetails);
+router.get("/check-details", requireSignIn, checkUserDetails);
 
-router.post('/verify-password', requireSignIn, verifyPassword);
+router.post("/verify-password", requireSignIn, verifyPassword);
 
-router.post('/stocks/buy', requireSignIn, buyStock);
+router.post("/stocks/buy", requireSignIn, buyStock);
 
-router.post('/funds/buy', requireSignIn, buyFund);
+router.post("/funds/buy", requireSignIn, buyFund);
 
-router.get('/get-funds', requireSignIn, getUserFunds);
+router.get("/get-funds", requireSignIn, getUserFunds);
 
-router.post('/funds/sell', requireSignIn, sellFund);
+router.post("/funds/sell", requireSignIn, sellFund);
 
 // Get user's purchased stocks
-router.get('/stocks/purchased', requireSignIn, getUserPurchasedStocks);
+router.get("/stocks/purchased", requireSignIn, getUserPurchasedStocks);
 
-router.post('/stocks/sell', requireSignIn, sellStock);
+router.post("/stocks/sell", requireSignIn, sellStock);
 
-router.get('/reward-points', requireSignIn, getRewardPoints);
+router.get("/reward-points", requireSignIn, getRewardPoints);
 
+router.get("/:userId", requireSignIn, getUserById);
 
 // export
 module.exports = router;

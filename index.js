@@ -9,6 +9,7 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 const multer = require("multer");
+const axios = require("axios");
 
 // Load environment variables
 dotenv.config();
@@ -79,7 +80,6 @@ app.use("/api/v1/auth", userRoutes); // User routes
 app.use("/api/v1/transaction", require("./routes/transactionRoutes"));
 app.use("/api/v1/income", require("./routes/incomeRoutes"));
 app.use("/api/v1/stock", require("./routes/stockRoutes"));
-app.use("/api/v1/feedback", feedbackRoutes);
 
 app.post("/pay", async (req, res, next) => {
   try {
@@ -146,6 +146,130 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected");
   });
+});
+
+const GEMINI_API_KEY = "AIzaSyBlCDikVqFYvBto7kEvpVHaLgd2x7eS-Gg";
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage?key=${GEMINI_API_KEY}`;
+
+app.use(bodyParser.json());
+
+app.post("/generateMessage", async (req, res) => {
+  const userMsg = req.body.message;
+
+  try {
+    const response = await axios.post(
+      GEMINI_API_URL,
+      {
+        prompt: {
+          messages: [{ content: userMsg }],
+        },
+        temperature: 0.25,
+        candidateCount: 1,
+        top_k: 40,
+        top_p: 0.95,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error(
+      "Error fetching Bard API response:",
+      error.response ? error.response.data : error.message
+    );
+    res.status(500).json({ error: "Failed to generate message" });
+  }
+});
+
+app.post("/generateInvestmentPlan", async (req, res) => {
+  const responses = req.body;
+
+  const prompt = `Create an investment plan for a ${responses.age}-year-old with ${responses.savedMoney} rupees saved, a ${responses.riskTolerance} risk tolerance, an investment goal of ${responses.investmentGoals}, an investment horizon of ${responses.investmentHorizon}, an income level of ${responses.incomeLevel}, and expenses and liabilities: ${responses.expensesAndLiabilities}.`;
+
+  try {
+    const response = await axios.post(
+      GEMINI_API_URL,
+      {
+        prompt: {
+          messages: [{ content: prompt }],
+        },
+        temperature: 0.25,
+        candidateCount: 1,
+        top_k: 40,
+        top_p: 0.95,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (
+      response.data &&
+      response.data.candidates &&
+      response.data.candidates.length > 0
+    ) {
+      res.json(response.data.candidates[0].content);
+    } else {
+      throw new Error("No candidates found in the response");
+    }
+  } catch (error) {
+    console.error(
+      "Error fetching investment plan:",
+      error.response ? error.response.data : error.message
+    );
+    res.status(500).json({
+      error: "Failed to generate investment plan",
+      details: error.message,
+    });
+  }
+});
+
+app.post("/generateRetirementPlan", async (req, res) => {
+  const responses = req.body;
+
+  const prompt = `Create a retirement plan for a ${responses.age}-year-old who plans to retire at age ${responses.retirementAge}, with goals of ${responses.retirementGoals}, an income level of ${responses.incomeLevel}, insurance: ${responses.insurance}, and liabilities: ${responses.liabilities}.`;
+
+  try {
+    const response = await axios.post(
+      GEMINI_API_URL,
+      {
+        prompt: {
+          messages: [{ content: prompt }],
+        },
+        temperature: 0.25,
+        candidateCount: 1,
+        top_k: 40,
+        top_p: 0.95,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (
+      response.data &&
+      response.data.candidates &&
+      response.data.candidates.length > 0
+    ) {
+      res.json(response.data.candidates[0].content);
+    } else {
+      throw new Error("No candidates found in the response");
+    }
+  } catch (error) {
+    console.error(
+      "Error fetching retirement plan:",
+      error.response ? error.response.data : error.message
+    );
+    res.status(500).json({
+      error: "Failed to generate retirement plan",
+      details: error.message,
+    });
+  }
 });
 
 // Start server
