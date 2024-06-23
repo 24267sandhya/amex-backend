@@ -17,7 +17,14 @@ dotenv.config();
 // Connect to MongoDB
 connectDB();
 
-require("../ScanAndPay/utils/scheduler");
+// Require the scheduler module conditionally
+if (process.env.NODE_ENV !== "production") {
+  try {
+    require("../ScanAndPay/utils/scheduler");
+  } catch (error) {
+    console.warn("Scheduler module not found, skipping...");
+  }
+}
 
 const app = express();
 const server = http.createServer(app);
