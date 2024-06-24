@@ -84,6 +84,7 @@ app.use("/api/plans", plansRouter);
 app.use("/api/v1/goal", goalsRouter); // Add this line
 app.use("/api/chat", chatRoutes); // Chat routes
 app.use("/api/v1/auth", userRoutes); // User routes
+app.use("/api/v1/feedback", feedbackRoutes);
 app.use("/api/v1/transaction", require("./routes/transactionRoutes"));
 app.use("/api/v1/income", require("./routes/incomeRoutes"));
 app.use("/api/v1/stock", require("./routes/stockRoutes"));
